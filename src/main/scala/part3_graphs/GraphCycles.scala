@@ -26,7 +26,7 @@ object GraphCycles extends App {
   }
 
   // RunnableGraph.fromGraph(accelerator).run()
-  // graph cycle deadlock!
+  // graph cycle deadlock! Because buffers of components become full and start to backpressure source
 
   /*
     Solution 1: MergePreferred

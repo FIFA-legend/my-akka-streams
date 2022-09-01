@@ -50,7 +50,7 @@ object IntegratingWithExternalServices extends App {
   }
 
   val infraEvents = eventSource.filter(_.application == "AkkaInfra")
-  val pagedEngineerEmails = infraEvents.mapAsync(parallelism = 4)(event => PagerService.processEvent(event))
+  val pagedEngineerEmails = infraEvents.mapAsync(parallelism = 4)(event => PagerService.processEvent(event)) // parallelism shows how many futures can run at the same time
   // guarantees the relative order of elements
   val pagedEmailsSink = Sink.foreach[String](email => println(s"Successfully sent notification to $email"))
   // pagedEngineerEmails.to(pagedEmailsSink).run()
@@ -90,4 +90,13 @@ object IntegratingWithExternalServices extends App {
   alternativePagedEngineerEmails.to(pagedEmailsSink).run()
 
   // do not confuse mapAsync with async (ASYNC boundary)
+
+  /*
+    Useful when the services are asynchronous
+    - the Futures are evaluated in parallel
+    - the relative order of elements is maintained (mapAsync)
+    - a lagging Future will stall the entire stream
+
+    Evaluate the Futures on their own ExecutionContext
+   */
 }

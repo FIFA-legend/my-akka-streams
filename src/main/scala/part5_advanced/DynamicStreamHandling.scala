@@ -63,7 +63,7 @@ object DynamicStreamHandling extends App {
   val broadcast = BroadcastHub.sink[String]
   val (publisherPort, subscriberPort) = merge.toMat(broadcast)(Keep.both).run()
 
-  subscriberPort.runWith(Sink.foreach(e => println(s"I received $e")))
+  subscriberPort.runWith(Sink.foreach(e => println(s"I received: $e")))
   subscriberPort.map(string => string.length).runWith(Sink.foreach(n => println(s"I got a number: $n")))
 
   Source(List("Akka", "is", "amazing")).runWith(publisherPort)

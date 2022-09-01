@@ -8,8 +8,36 @@ import scala.concurrent.Future
 
 object FirstPrinciples extends App {
 
+  /*
+    Concepts:
+    - publisher = emits elements (asynchronously)
+    - subscriber = receives elements
+    - processor = transforms elements along the way
+    - async
+    - backpressure
+   */
+
+  /*
+    Akka Streams
+
+    Source = "publisher"
+    - emits elements asynchronously
+    - may or may not terminate
+
+    Sink = "subscriber"
+    - receives elements
+    - terminates only when the publisher terminates
+
+    Flow = "processor"
+    - transforms elements
+
+    Directions
+    - upstream = to the source
+    - downstream = to the sink
+   */
+
   implicit val system = ActorSystem("FirstPrinciples")
-  implicit val materializer = ActorMaterializer()
+  implicit val materializer = ActorMaterializer() // allows running of Akka Stream components
 
   // sources
   val source = Source(1 to 10)
@@ -26,14 +54,15 @@ object FirstPrinciples extends App {
 
 //  sourceWithFlow.to(sink).run()
 //  source.to(flowWithSink).run()
-//  source.via(flow).to(sink)
+//  source.via(flow).to(sink).run()
 
   // nulls are NOT allowed
-  // val illegalSource = Source.single[String](null)
+  // values must be IMMUTABLE and SERIALIZABLE
+  // val illegalSource = Source.single[String](null) // throws NullPointerException
   // illegalSource.to(Sink.foreach(println)).run()
   // use Options instead
 
-  // various linds of sources
+  // various kinds of sources
   val finiteSource = Source.single(1)
   val anotherFiniteSource = Source(List(1, 2, 3))
   val emptySource = Source.empty[Int]
@@ -43,7 +72,7 @@ object FirstPrinciples extends App {
   val futureSource = Source.fromFuture(Future(42))
 
   // sinks
-  val theMostBoringSink = Sink.ignore
+  val theMostBoringSink = Sink.ignore // consumes everything and does nothing
   val foreachSink = Sink.foreach[String](println)
   val headSink = Sink.head[Int] // retrieves head ane then closes the stream
   val foldSink = Sink.fold[Int, Int](0)((a, b) => a + b)

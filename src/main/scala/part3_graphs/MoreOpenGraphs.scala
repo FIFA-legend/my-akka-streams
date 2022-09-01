@@ -1,7 +1,7 @@
 package part3_graphs
 
 import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, ClosedShape, FanOutShape2, UniformFanInShape}
+import akka.stream.{ActorMaterializer, ClosedShape, FanInShape2, FanOutShape2, UniformFanInShape}
 import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL, RunnableGraph, Sink, Source, ZipWith}
 
 import java.util.Date
@@ -59,7 +59,9 @@ object MoreOpenGraphs extends App {
 
   max3RunnableGraph.run()
 
-  // same for UniformFanOutShapes
+  // same for UniformFanOutShape
+
+  // Uniform...Shape receives elements of the same type
 
   /*
     Non-uniform fan out shape

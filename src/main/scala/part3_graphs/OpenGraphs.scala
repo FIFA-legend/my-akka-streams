@@ -26,7 +26,7 @@ object OpenGraphs extends App {
       val concat = builder.add(Concat[Int](2))
 
       // step 3: tying them together
-      firstSource ~> concat
+      firstSource ~> concat // simple source is implicitly converted into a shape
       secondSource ~> concat
 
       // step 4
@@ -51,7 +51,7 @@ object OpenGraphs extends App {
       val broadcast = builder.add(Broadcast[Int](2))
 
       // step 3 - tie components together
-      broadcast ~> sink1
+      broadcast ~> sink1 // simple sink is implicitly converted into a shape
       broadcast ~> sink2
 
       // step 4

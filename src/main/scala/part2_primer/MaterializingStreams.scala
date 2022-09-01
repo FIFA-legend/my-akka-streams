@@ -8,6 +8,28 @@ import scala.util.{Failure, Success}
 
 object MaterializingStreams extends App {
 
+  /*
+    Components are static until they run
+    A graph is a "blueprint" for a stream
+    Running a graph allocates the right resources
+    - actors, thread pools
+    - sockets, connections
+    - etc - everything is transparent
+    Running a graph = materializing
+   */
+
+  /*
+    Materializing a graph = materializing all components
+    - each component produces a materialized value when run
+    - the graph produces a single materialized value
+    - our job to choose which one to pick
+
+    A component can materialize multiple times
+    - you can reuse the same component in different graphs
+    - different run = different materialization!
+
+   */
+
   implicit val system = ActorSystem("MaterializingStreams")
   implicit val materializer = ActorMaterializer()
   import system.dispatcher
@@ -17,11 +39,13 @@ object MaterializingStreams extends App {
 
   val source = Source(1 to 10)
   val sink = Sink.reduce[Int]((a, b) => a + b)
-//  val sumFuture = source.runWith(sink)
+  val sumFuture = source.runWith(sink)
 //  sumFuture.onComplete {
 //    case Success(value) => println(s"The sum of all elements is $value")
 //    case Failure(ex) => println(s"The sum of the elements could not be computed: $ex")
 //  }
+
+  // By default, left value is used in methods to() and via()
 
   // choosing materialized values
   val simpleSource = Source(1 to 10)

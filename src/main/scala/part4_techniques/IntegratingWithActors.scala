@@ -9,6 +9,13 @@ import scala.concurrent.duration._
 
 object IntegratingWithActors extends App {
 
+  /*
+    Make Actors interact with Akka streams
+    - process elements in stream
+    - act as a source
+    - act as destination
+   */
+
   implicit val system = ActorSystem("IntegratingWithActors")
   implicit val materializer = ActorMaterializer()
 
@@ -31,6 +38,7 @@ object IntegratingWithActors extends App {
   // actor as a flow
   implicit val timeout = Timeout(2.seconds)
   val actorBasedFlow = Flow[Int].ask[Int](parallelism = 4)(simpleActor)
+  // parallelism says how many messages can be in mailbox of actor until backpressure is started
 
 //  numberSource.via(actorBasedFlow).to(Sink.ignore).run()
 //  numberSource.ask(parallelism = 4)(simpleActor).to(Sink.ignore).run()

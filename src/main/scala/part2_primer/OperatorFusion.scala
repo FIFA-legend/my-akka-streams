@@ -16,7 +16,8 @@ object OperatorFusion extends App {
 
   // this runs on the SAME ACTOR
   // simpleSource.via(simpleFlow).via(simpleFlow2).to(simpleSink).run()
-  // operator/component FUSION
+  // By default, all via(), viaMat(), to(), toMat() run on the same actor.
+  // This is called operator/component FUSION
 
   // "equivalent" behavior
   class SimpleActor extends Actor {

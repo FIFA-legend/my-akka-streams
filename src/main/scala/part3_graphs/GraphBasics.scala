@@ -102,4 +102,19 @@ object GraphBasics extends App {
 
   balanceGraph.run()
 
+  /*
+    Non-linear components:
+    - fan-out
+    - fan-in
+
+    Fan-out:
+    - Broadcast
+    - Balance
+
+    Fan-in:
+    - Zip/ZipWith
+    - Merge
+    - Concat
+   */
+
 }

@@ -6,6 +6,15 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 
 object BackpressureBasics extends App {
 
+  /*
+    One of the fundamental features of Reactive Streams
+    Elements flow as response to demand from consumers
+
+    Slow consumer: problem
+    - consumer will send a signal to producer to slow down
+    Backpressure protocol is transparent
+   */
+
   implicit val system = ActorSystem("BackpressureBasics")
   implicit val materializer = ActorMaterializer()
 
@@ -32,6 +41,7 @@ object BackpressureBasics extends App {
     .to(slowSink)
   //  .run()
 
+  // Default buffer is 16 elements, sink also has buffer
   /*
     reactions to backpressure (in order):
     - try to slow down if possible

@@ -65,4 +65,12 @@ object Substreams extends App {
   simpleSource.flatMapConcat(x => Source(x to (3 * x))).runWith(Sink.foreach(println))
   simpleSource.flatMapMerge(2, x => Source(x to (3 * x))).runWith(Sink.foreach(println))
 
+  /*
+    Flattening
+    Each element can spin up its own stream
+    Choose how to flatten:
+    - concatenate
+    - merge
+   */
+
 }

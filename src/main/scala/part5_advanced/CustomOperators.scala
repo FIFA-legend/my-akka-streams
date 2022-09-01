@@ -89,6 +89,41 @@ object CustomOperators extends App {
     }
   }
 
+  // backpressure signal is sent automatically
+
+  /*
+    Input port methods
+
+    InHandler interact with the upstream:
+    - onPush
+    - onUpstreamFinish
+    - onUpstreamFailure
+
+    Input ports can check and retrieve elements:
+    - pull: signal demand
+    - grab: take an element
+    - cancel: tell upstream to stop
+    - isAvailable
+    - hasBeenPulled
+    - isClosed
+   */
+
+  /*
+    Output port methods
+
+    OutHandlers interact with downstream:
+    - onPull
+    - onDownstreamFinish
+    (no onDownstreamFailure as I'll receive a cancel signal)
+
+    Output ports can send elements:
+    - push: send an element
+    - complete: finish the stream
+    - fail
+    - isAvailable
+    - isClosed
+   */
+
   val batcherSink = Sink.fromGraph(new Batcher(10))
   // randomGeneratorSource.to(batcherSink).run()
 
@@ -184,6 +219,9 @@ object CustomOperators extends App {
       (logic, promise.future)
     }
   }
+
+  // Handler callbacks are never called concurrently
+  // DO NOT expose mutable state outside these handlers
 
   val counterFlow = Flow.fromGraph(new CounterFlow[Int])
   val countFuture = Source(1 to 10)
